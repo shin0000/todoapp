@@ -1,0 +1,54 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./database/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=mydb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1111
+    expose:
+      - 5432
+    networks:
+      front-back-db-net:
+        ipv4_address: 172.16.238.2
+
+  front:
+    build: ./test2_project
+    volumes:
+      - ./test2_project/test2_project/:/test2_project/
+    command: ['sh', 'startup.sh']
+    ports:
+      - "3001:3000"
+    depends_on:
+      - back
+    expose:
+      - 3000
+    networks:
+      front-back-db-net:
+        ipv4_address: 172.16.238.3
+  
+  back:
+    build: ./api_test2
+    volumes:
+      - ./api_test2/api_test2/:/api_test2/
+    command: ['sh', 'startup.sh']
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    expose:
+      - 8000
+    networks:
+      front-back-db-net:
+        ipv4_address: 172.16.238.4
+
+networks:
+  front-back-db-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24
+          gateway: 172.16.238.1

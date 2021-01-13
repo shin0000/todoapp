@@ -1,0 +1,1 @@
+docker run --name react_test1 --network front-back -v $PWD/test2_project:/test2_project -p 3001:3000 -it shinji/react_test1 /bin/bash

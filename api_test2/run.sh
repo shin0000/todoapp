@@ -1,0 +1,1 @@
+docker run --name api_test2 --network front-back -it -p 8001:8000 -v $PWD/api_test2/:/api_test2/ shinji/api_test2 /bin/bash
